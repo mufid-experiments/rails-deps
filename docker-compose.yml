@@ -1,0 +1,33 @@
+version: '3.8'
+services:
+  redis:
+    build: redis
+    ports:
+      - "6379:6379"
+  postgres:
+    image: postgres:12.3
+    ports:
+      - "5432:5432"
+    stop_grace_period: 5m
+    command: ["postgres", "-c", "log_statement=all"]
+    environment:
+      POSTGRES_HOST_AUTH_METHOD: trust
+  redis_setup:
+    image: redis
+    depends_on:
+      - redis
+    restart: "no"
+    volumes:
+      - ./reset-redis.sh:/reset-redis.sh
+    entrypoint: sh -c "/reset-redis.sh"
+  redis_mon:
+    image: redis
+    depends_on:
+      - redis
+    restart: "no"
+    volumes:
+      - ./monitor-redis.sh:/monitor-redis.sh
+    entrypoint: sh -c "/monitor-redis.sh"
+    stop_grace_period: 1s
+
+
