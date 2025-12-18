@@ -1,3 +1,9 @@
+An all-in-one dependency for 95% Rails application (includes Redis and Postgres)
+
+# Running everything
+
+    docker-compose up
+
 # Running Redis from docker-compose
 
     docker-compose run redis redis-cli -h redis
